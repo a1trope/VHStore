@@ -1,12 +1,12 @@
-from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import status
 from . import models
 from . import serializers
 
 
 @api_view(["GET", "POST"])
-def get_cassettes(request):
+def cassettes_list(request):
     if request.method == "GET":
         queryset = models.Cassette.objects.all()
         serializer = serializers.CassetteSerializer(queryset, many=True)
@@ -18,6 +18,31 @@ def get_cassettes(request):
 
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        return Response({"message": serializer.errors}, status=400)
+        return Response({"errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["GET", "PUT", "DELETE"])
+def cassettes_detail(request, id):
+    if not models.Cassette.objects.filter(id=id).exists():
+        return Response({"message": "Object doesn't exists"}, status=status.HTTP_400_BAD_REQUEST)
+
+    cassette = models.Cassette.objects.get(id=id)
+
+    if request.method == "GET":
+        serializer = serializers.CassetteSerializer(cassette)
+        return Response(serializer.data)
+
+    if request.method == "PUT":
+        serializer = serializers.CassetteSerializer(cassette, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+
+        return Response({"errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == "DELETE":
+        cassette.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
