@@ -5,15 +5,19 @@ from . import models
 from . import serializers
 
 
-@api_view(["GET"])
+@api_view(["GET", "POST"])
 def get_cassettes(request):
-    queryset = models.Cassette.objects.all()
-    serializer = serializers.CassetteSerializer(queryset, many=True)
+    if request.method == "GET":
+        queryset = models.Cassette.objects.all()
+        serializer = serializers.CassetteSerializer(queryset, many=True)
 
-    return Response({"message": serializer.data})
+        return Response({"message": serializer.data})
 
+    if request.method == "POST":
+        serializer = serializers.CassetteSerializer(data=request.data)
 
-@api_view(["POST"])
-def create_cassette(request):
-    return Response({"message": None})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
 
+        return Response({"message": serializer.errors}, status=400)
