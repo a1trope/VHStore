@@ -1,11 +1,13 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, permissions, authentication
 from . import models
 from . import serializers
 
 
 @api_view(["GET", "POST"])
+@authentication_classes([authentication.SessionAuthentication, authentication.BaseAuthentication])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def cassettes_list(request):
     if request.method == "GET":
         queryset = models.Cassette.objects.all()
@@ -24,6 +26,8 @@ def cassettes_list(request):
 
 
 @api_view(["GET", "PUT", "PATCH", "DELETE"])
+@authentication_classes([authentication.SessionAuthentication, authentication.TokenAuthentication])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def cassettes_detail(request, id):
     if not models.Cassette.objects.filter(id=id).exists():
         return Response({"message": "Object doesn't exists"}, status=status.HTTP_400_BAD_REQUEST)
