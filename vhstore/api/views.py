@@ -9,6 +9,7 @@ from . import serializers
 @authentication_classes([authentication.SessionAuthentication, authentication.TokenAuthentication])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def cassettes_list(request):
+    """Работа со списком кассет"""
     if request.method == "GET":
         queryset = models.Cassette.objects.all()
         serializer = serializers.CassetteSerializer(queryset, many=True)
