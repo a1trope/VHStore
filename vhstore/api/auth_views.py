@@ -8,7 +8,22 @@ from rest_framework.authtoken.models import Token
 
 @api_view(['POST'])
 def signup(request):
-    return Response()
+    if User.objects.filter(username=request.data["username"]).exists():
+        return Response({"message": f"User \"{request.data["username"]}\" already exists"}, status=status.HTTP_400_BAD_REQUEST)
+
+    serializer = serializers.UserSerializer(data=request.data)
+
+    if serializer.is_valid():
+        serializer.save()
+        user = User.objects.get(username=request.data["username"])
+        user.set_password(request.data["password"])
+        user.save()
+        token = Token.objects.create(user=user)
+
+        return Response({"token": token.key, "user": serializer.data})
+
+    return Response({"errors": serializer.errors})
+
 
 
 @api_view(['POST'])
@@ -19,14 +34,11 @@ def login(request):
     user = User.objects.get(username=request.data["username"])
     serializer = serializers.UserSerializer(request.data)
 
+    print(user.check_password(request.data["password"]))
+
     if not user.check_password(request.data["password"]):
         return Response({"message": f"Wrong password for \"{user.get_username()}\""}, status=status.HTTP_400_BAD_REQUEST)
 
     token, created = Token.objects.get_or_create(user=user)
 
     return Response({"token": token.key, "user": serializer.data})
-
-
-@api_view(['POST'])
-def logout(request):
-    return Response()
