@@ -44,7 +44,7 @@ BODY:
 _Ответ_:
 ```json
 {
-    "token": "0d10ba79b691d17c69d6042369b8e013547476ef",
+    "token": "...",
     "user": {
         "username": "jimmy",
         "password": "123"
@@ -52,14 +52,10 @@ _Ответ_:
 }
 ```
 
-
-
-
-
 ### Примеры Запросов
 
 #### Модель:
-```
+```python
 class Cassette(models.Model):
     title: str
     director: str
@@ -112,7 +108,7 @@ _Ответ_:
 ```
 
 
-#### 3) PUT: api/cassetes/<id>
+#### 3) PUT: api/cassetes/{id}
 
 Статус ответа: 200 (OK)
 
@@ -141,7 +137,7 @@ _Ответ_:
 
 
 
-#### 4) PATCH: api/cassetes/<id>
+#### 4) PATCH: api/cassetes/{id}
 
 Статус ответа: 204 (No content)
 
@@ -154,6 +150,6 @@ BODY:
 
 
 
-#### 5) DELETE api/cassetes/<id>
+#### 5) DELETE api/cassetes/{id}
 
 Статус ответа: 204 (No content)
