@@ -14,7 +14,7 @@ def cassettes_list(request):
         queryset = models.Cassette.objects.all()
         serializer = serializers.CassetteSerializer(queryset, many=True)
 
-        return Response({"message": serializer.data})
+        return Response(serializer.data)
 
     if request.method == "POST":
         serializer = serializers.CassetteSerializer(data=request.data)
