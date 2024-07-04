@@ -6,7 +6,7 @@ from . import serializers
 
 
 @api_view(["GET", "POST"])
-@authentication_classes([authentication.SessionAuthentication, authentication.BaseAuthentication])
+@authentication_classes([authentication.SessionAuthentication, authentication.TokenAuthentication])
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def cassettes_list(request):
     if request.method == "GET":
