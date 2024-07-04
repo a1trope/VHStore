@@ -23,7 +23,7 @@ def cassettes_list(request):
         return Response({"errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(["GET", "PUT", "DELETE"])
+@api_view(["GET", "PUT", "PATCH", "DELETE"])
 def cassettes_detail(request, id):
     if not models.Cassette.objects.filter(id=id).exists():
         return Response({"message": "Object doesn't exists"}, status=status.HTTP_400_BAD_REQUEST)
@@ -36,6 +36,15 @@ def cassettes_detail(request, id):
 
     if request.method == "PUT":
         serializer = serializers.CassetteSerializer(cassette, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+
+        return Response({"errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == "PATCH":
+        serializer = serializers.CassetteSerializer(cassette, data=request.data, partial=True)
 
         if serializer.is_valid():
             serializer.save()
