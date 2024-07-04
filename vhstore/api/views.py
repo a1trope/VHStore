@@ -30,7 +30,7 @@ def cassettes_list(request):
 @permission_classes([permissions.IsAuthenticatedOrReadOnly])
 def cassettes_detail(request, id):
     if not models.Cassette.objects.filter(id=id).exists():
-        return Response({"message": "Object doesn't exists"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"message": "Object doesn't exist"}, status=status.HTTP_400_BAD_REQUEST)
 
     cassette = models.Cassette.objects.get(id=id)
 

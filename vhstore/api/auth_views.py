@@ -29,7 +29,7 @@ def signup(request):
 @api_view(['POST'])
 def login(request):
     if not User.objects.filter(username=request.data["username"]).exists():
-        return Response({"message": "User doesn't exists"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"message": "User doesn't exist"}, status=status.HTTP_400_BAD_REQUEST)
 
     user = User.objects.get(username=request.data["username"])
     serializer = serializers.UserSerializer(request.data)
