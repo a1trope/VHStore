@@ -25,7 +25,6 @@ def signup(request):
     return Response({"errors": serializer.errors})
 
 
-
 @api_view(['POST'])
 def login(request):
     serializer = serializers.UserSerializer(data=request.data)
