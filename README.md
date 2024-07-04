@@ -1,4 +1,18 @@
-## Кузнецов Александр, Тестовое задание Python
+# Кузнецов Александр, Тестовое задание Python
+
+# Содержание
+- [Описание проекта](#-)
+- [Доступ](#)
+    - [1. Запрос на регистрацию нового пользователя](#1-----)
+    - [2. Запрос на получение токена](#2----)
+  - [Примеры Запросов](#-)
+    - [Модель](#)
+    - [1) GET: api/cassetes/](#1-get-apicassetes)
+    - [2) POST: api/cassetes/](#2-post-apicassetes)
+    - [3) PUT: api/cassetes/{id}](#3-put-apicassetesid)
+    - [4) PATCH: api/cassetes/{id}](#4-patch-apicassetesid)
+    - [5) DELETE api/cassetes/{id}](#5-delete-apicassetesid)
+
 
 ## Описание проекта
 API сервис для интернет-магазина VHS-кассет. Список всех эндпоинтов лежит по **_api/swagger_**
@@ -54,7 +68,7 @@ _Ответ_:
 
 ### Примеры Запросов
 
-#### Модель:
+#### Модель
 ```python
 class Cassette(models.Model):
     title: str
