@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status, permissions, authentication
 from . import models
 from . import serializers
-
+from . import filters
 
 @api_view(["GET", "POST"])
 @authentication_classes([authentication.SessionAuthentication, authentication.TokenAuthentication])
@@ -12,7 +12,8 @@ def cassettes_list(request):
     """Работа со списком кассет"""
     if request.method == "GET":
         queryset = models.Cassette.objects.all()
-        serializer = serializers.CassetteSerializer(queryset, many=True)
+        filtered_data = filters.CassetteFilter(request.GET, queryset=queryset)
+        serializer = serializers.CassetteSerializer(filtered_data.qs, many=True)
 
         return Response(serializer.data)
 
