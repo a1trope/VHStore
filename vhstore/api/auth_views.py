@@ -27,18 +27,20 @@ def signup(request):
 
 @api_view(['POST'])
 def login(request):
+    serializer = serializers.UserSerializer(data=request.data)
+    serializer.is_valid()
+
+    if "username" not in request.data or "password" not in request.data:
+        return Response({"errors": serializer.errors})
 
     queryset = User.objects.filter(username=request.data["username"])
     if not queryset.exists():
         return Response({"message": "User doesn't exist"}, status=status.HTTP_400_BAD_REQUEST)
 
-    user = User.objects.get(username=request.data["username"])
+    user = queryset.get(username=request.data["username"])
 
     if not user.check_password(request.data["password"]):
         return Response({"message": f"Wrong password for \"{user.get_username()}\""}, status=status.HTTP_400_BAD_REQUEST)
-
-    serializer = serializers.UserSerializer(data=request.data)
-    serializer.is_valid()
 
     token, created = Token.objects.get_or_create(user=user)
 
